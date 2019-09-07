@@ -40,6 +40,7 @@ router.post('/', (req, res) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         // add user info to the session
         req.session.user = users
+
         res.status(200).json({
           message: `Welcome ${user.username}!`
         })
@@ -52,6 +53,22 @@ router.post('/', (req, res) => {
     .catch(error => {
       res.status(500).json(error)
     })
+})
+
+// GET Request logout a user
+// --------------------------------------------|
+router.get('/logout', (req, res) => {
+  if (req.session) {
+    res.session.destroy(err => {
+      if (err) {
+        res.json({
+          message: "Well, that's unfortunate, guess you're stickin' around!"
+        })
+      } else {
+        res.end()
+      }
+    })
+  }
 })
 
 // Export Router
