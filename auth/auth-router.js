@@ -29,6 +29,31 @@ router.post('/', (req, res) => {
     })
 })
 
+// POST Request logs in a user
+// --------------------------------------------|
+router.post('/', (req, res) => {
+  let { username, password } = req.body
+
+  Users.findBy({ username })
+    .first()
+    .then(user => {
+      if (user && bcrypt.compareSync(password, user.password)) {
+        // add user info to the session
+        req.session.user = users
+        res.status(200).json({
+          message: `Welcome ${user.username}!`
+        })
+      } else {
+        res.status(200).json({
+          message: 'Invalid credentials'
+        })
+      }
+    })
+    .catch(error => {
+      res.status(500).json(error)
+    })
+})
+
 // Export Router
 // --------------------------------------------|
 module.exports = router
