@@ -11,7 +11,7 @@ const Users = require('../users/users-model')
 // --------------------------------------------|
 // POST Request registers a new user in the db
 // --------------------------------------------|
-router.post('/', (req, res) => {
+router.post('/register', (req, res) => {
   let user = req.body
   const hash = bcrypt.hashSync(user.password, 10)
   user.password = hash
@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
 
 // POST Request logs in a user
 // --------------------------------------------|
-router.post('/', (req, res) => {
+router.post('/login', (req, res) => {
   let { username, password } = req.body
 
   Users.findBy({ username })

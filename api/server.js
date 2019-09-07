@@ -13,6 +13,9 @@ const connectSessionKnex = require('connect-session-knex')
 const usersRouter = require('../users/users-router.js')
 const authRouter = require('../auth/auth-router.js')
 
+// bring in db
+const db = require('../data/dbConfig.js')
+
 // initialize express server
 // --------------------------------------------|
 const server = express()
