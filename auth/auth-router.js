@@ -5,34 +5,29 @@ const bcrypt = require('bcryptjs')
 
 // Bring in DB Helper Methods
 // --------------------------------------------|
-const DB = require('../auth/auth-model')
+const Users = require('../users/users-model')
 
-// User router endpoint base '/api/users'
+// Auth router endpoint base '/api/auth'
 // --------------------------------------------|
-
-// GET Request returns a list of users
+// POST Request registers a new user in the db
 // --------------------------------------------|
-router.get('/', restricted, (req, res) => {})
+router.post('/', (req, res) => {
+  let user = req.body
+  const hash = bcrypt.hashSync(user.password, 10)
+  user.password = hash
 
-// Define restricted middleware
-function restricted(req, res, next) {
-  if (username && password) {
-    DB.findBy({ username })
-      .first()
-      .then(user => {
-        if (user && bcrypt.compareSync(password, user.password)) {
-          next()
-        } else {
-          res.status(401).json({ message: 'hmmm...' })
-        }
-      })
-      .catch(err => {
-        res.status(500).json({ message: 'unexpected error' })
-      })
-  } else {
-    res.status(400).json({ message: 'please provide username and password' })
-  }
-}
+  Users.add(user)
+    .then(saved => {
+      // add user info to the session
+      req.session.user = user
+      // send back a cookie
+      res.status(201).json(saved)
+    })
+    .catch(error => {
+      console.log(error)
+      res.status(500).json(error)
+    })
+})
 
 // Export Router
 // --------------------------------------------|
