@@ -1,10 +1,8 @@
-// Bring in express router & bcrypt
-// --------------------------------------------|
+// Bring in express router
 const router = require('express').Router()
-
 // Bring in DB Helper Methods
-// --------------------------------------------|
 const Users = require('./users-model.js')
+// Bring in restricted middleware
 const restricted = require('../auth/restricted-middleware.js')
 
 // User router endpoint base '/api/users'
