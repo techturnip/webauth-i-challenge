@@ -39,7 +39,7 @@ router.post('/login', (req, res) => {
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
         // add user info to the session
-        req.session.user = users
+        req.session.user = user
 
         res.status(200).json({
           message: `Welcome ${user.username}!`
@@ -59,7 +59,7 @@ router.post('/login', (req, res) => {
 // --------------------------------------------|
 router.get('/logout', (req, res) => {
   if (req.session) {
-    res.session.destroy(err => {
+    req.session.destroy(err => {
       if (err) {
         res.json({
           message: "Well, that's unfortunate, guess you're stickin' around!"
